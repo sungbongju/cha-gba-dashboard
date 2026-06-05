@@ -70,9 +70,11 @@ function Hist({ items, color = 'cyan', showCnt = true }) {
       {items.map((it, i) => (
         <div className="col" key={i}>
           {showCnt && <span className="cnt">{it.n || ''}</span>}
-          {it.n > 0
-            ? <span className={`colbar ${color}`} style={{ height: `${(it.n / max) * 100}%` }} title={`${it.lab}: ${it.n}`} />
-            : <span className="colzero" title={`${it.lab}: 0`} />}
+          <span className="barslot">
+            {it.n > 0
+              ? <span className={`colbar ${color}`} style={{ height: `${(it.n / max) * 100}%` }} title={`${it.lab}: ${it.n}`} />
+              : <span className="colzero" title={`${it.lab}: 0`} />}
+          </span>
           <span className="lab">{it.lab}</span>
         </div>
       ))}
