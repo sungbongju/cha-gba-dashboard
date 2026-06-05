@@ -167,10 +167,10 @@ export default function App() {
   return (
     <div className="wrap">
       <div className="topbar">
-        <div className="brandmark">■</div>
+        <div className="brandmark">G</div>
         <div>
-          <div className="brand-t glitch" data-text="GBA // RESEARCH TELEMETRY">GBA // RESEARCH TELEMETRY</div>
-          <div className="brand-s">CHA Global Business AI · Trust Survey + Usage</div>
+          <div className="brand-t">GBA <span className="div-dot">·</span> RESEARCH TELEMETRY</div>
+          <div className="brand-s">CHA Global Business AI · Trust Survey &amp; Usage</div>
         </div>
         <span className="spacer" />
         <span className={`live ${state === 'stale' ? 'stale' : ''}`}>
