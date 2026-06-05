@@ -150,6 +150,7 @@ export default function App() {
   const compRows = Object.keys(COMPONENT_LABELS)
     .map(k => ({ k, label: COMPONENT_LABELS[k], ...(comps[k] || {}) }))
     .filter(r => r.n != null)
+    .filter(r => r.k !== 'q23_kakao_redirect') // no Kakao login → always N/A
     .sort((a, b) => (b.yes_pct ?? -1) - (a.yes_pct ?? -1))
 
   const turnBins = usage.turn_hist
@@ -196,8 +197,8 @@ export default function App() {
           <div className="grid" style={{ marginBottom: 14 }}>
             <div className={`col-3 ${flash ? 'flash' : ''}`}><Kpi tone="acid" label="Survey responses" value={fmt(survey.total)} sub={`${fmt(survey.valid)} valid`} /></div>
             <div className="col-3"><Kpi tone="cyan" label="Sessions" value={fmt(t.sessions_total)} sub={`${fmt(t.anon_sessions)} anonymous`} /></div>
-            <div className={`col-3 ${flash ? 'flash' : ''}`}><Kpi tone="magenta" label="Messages" value={fmt(t.messages_total)} sub={`${fmt(t.user_messages)} user · ${fmt(t.bot_messages)} bot`} /></div>
-            <div className="col-3"><Kpi tone="amber" label="Registered users" value={fmt(t.users_total)} sub={`${fmt(t.users_email)} email · ${fmt(t.users_kakao)} kakao`} /></div>
+            <div className={`col-3 ${flash ? 'flash' : ''}`}><Kpi tone="magenta" label="User messages" value={fmt(t.user_messages)} sub={`across ${fmt(t.sessions_total)} sessions`} /></div>
+            <div className="col-3"><Kpi tone="amber" label="Registered users" value={fmt(t.users_total)} sub="email sign-up" /></div>
           </div>
 
           <div className="grid">
@@ -251,9 +252,9 @@ export default function App() {
 
             <div className="section-label">02 · Usage Analytics</div>
 
-            <div className="col-3"><Kpi label="Avg turns / session" value={usage.session_avg?.turns ?? '—'} /></div>
-            <div className="col-3"><Kpi label="Avg session (min)" value={usage.session_avg?.minutes ?? '—'} /></div>
-            <div className="col-3"><Kpi label="Anon messages" value={fmt(t.anon_messages)} /></div>
+            <div className="col-3"><Kpi label="Msgs / session" value={t.sessions_total ? Math.round((t.messages_total / t.sessions_total) * 10) / 10 : '—'} /></div>
+            <div className="col-3"><Kpi label="Avg turns / session" value={usage.session_avg?.turns ?? '—'} sub="sessions with 2+ msgs" /></div>
+            <div className="col-3"><Kpi label="Anon messages" value={fmt(t.anon_messages)} sub={`of ${fmt(t.user_messages)} total`} /></div>
             <div className="col-3"><Kpi label="Active days" value={fmt((usage.activity || []).length)} /></div>
 
             <div className="col-6">
