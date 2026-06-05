@@ -203,19 +203,25 @@ export default function App() {
           <div className="grid">
             <div className="section-label">01 · Trust Survey</div>
 
-            <div className="col-4">
-              <Panel idx="1.1" title="Trust layers" sub="avg / max">
-                {['L1', 'L2', 'L3', 'L4', 'total'].map(L => {
-                  const o = layers[L]
-                  const p = o && o.avg != null ? (o.avg / o.max) * 100 : 0
-                  return <BarRow key={L} k={L === 'total' ? 'TOTAL' : L} pct={p}
-                    value={o && o.avg != null ? `${o.avg}/${o.max}` : '—'} color={L === 'total' ? 'acid' : 'cyan'} />
-                })}
-                <div className="empty">Higher = stronger perceived trust signal.</div>
-              </Panel>
+            <div className="col-5">
+              <div className="stack">
+                <Panel idx="1.1" title="Trust layers" sub="avg / max">
+                  {['L1', 'L2', 'L3', 'L4', 'total'].map(L => {
+                    const o = layers[L]
+                    const p = o && o.avg != null ? (o.avg / o.max) * 100 : 0
+                    return <BarRow key={L} k={L === 'total' ? 'TOTAL' : L} pct={p}
+                      value={o && o.avg != null ? `${o.avg}/${o.max}` : '—'} color={L === 'total' ? 'acid' : 'cyan'} />
+                  })}
+                  <div className="empty">Higher = stronger perceived trust signal.</div>
+                </Panel>
+
+                <Panel idx="1.4" title="Demographics" sub="n per group">
+                  <Demo survey={survey} />
+                </Panel>
+              </div>
             </div>
 
-            <div className="col-8">
+            <div className="col-7">
               <Panel idx="1.2" title="Trust components · YES rate" sub={`${compRows.length} items`}>
                 {compRows.length === 0 && <div className="empty">No responses yet.</div>}
                 {compRows.map(r => (
@@ -225,15 +231,9 @@ export default function App() {
               </Panel>
             </div>
 
-            <div className="col-6">
+            <div className="col-12">
               <Panel idx="1.3" title="Score distribution" sub="total yes 0–18">
                 {scoreHist.length ? <Hist items={scoreHist} color="acid" /> : <div className="empty">No responses yet.</div>}
-              </Panel>
-            </div>
-
-            <div className="col-6">
-              <Panel idx="1.4" title="Demographics" sub="n per group">
-                <Demo survey={survey} />
               </Panel>
             </div>
 

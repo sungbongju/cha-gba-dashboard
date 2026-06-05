@@ -82,10 +82,16 @@ h1, h2, h3 { margin: 0; }
 .tv { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--hi); }
 
 /* ── Layout ── */
-.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-.col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; }
-.col-6 { grid-column: span 6; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
-@media (max-width: 980px) { .col-3 { grid-column: span 6; } .col-4 { grid-column: span 6; } .col-6, .col-8 { grid-column: span 12; } }
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; align-items: start; }
+.col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; } .col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; } .col-7 { grid-column: span 7; } .col-8 { grid-column: span 8; } .col-12 { grid-column: span 12; }
+.stack { display: flex; flex-direction: column; gap: 16px; height: 100%; }
+/* Section 01: make the two columns equal height (no leftover empty grid space);
+   the shorter side's last panel grows to fill instead. */
+.col-5, .col-7 { align-self: stretch; }
+.col-5 > .stack > .panel:last-child { flex: 1 1 auto; }
+.col-7 > .panel { height: 100%; }
+@media (max-width: 980px) { .col-3 { grid-column: span 6; } .col-4 { grid-column: span 6; } .col-5, .col-6, .col-7, .col-8 { grid-column: span 12; } }
 @media (max-width: 560px) { .col-3, .col-4 { grid-column: span 12; } }
 
 /* ── Panels ── */
