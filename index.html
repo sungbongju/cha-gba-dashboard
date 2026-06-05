@@ -8,7 +8,16 @@
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230b0a08'/%3E%3Ctext x='50' y='73' font-size='62' font-family='Georgia,serif' font-weight='700' fill='%23d4af37' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+    <script>
+      // Set theme before paint to avoid a flash of the wrong palette.
+      (function () {
+        try {
+          var t = localStorage.getItem('gba_theme') || 'royal'
+          document.documentElement.setAttribute('data-theme', t)
+        } catch (e) { document.documentElement.setAttribute('data-theme', 'royal') }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

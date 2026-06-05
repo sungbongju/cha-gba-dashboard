@@ -109,6 +109,13 @@ export default function App() {
   const [data, setData] = useState(null)
   const [state, setState] = useState('loading') // loading | live | stale | error
   const [err, setErr] = useState('')
+  const [theme, setTheme] = useState(() => {
+    try { return localStorage.getItem('gba_theme') || 'royal' } catch { return 'royal' }
+  })
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    try { localStorage.setItem('gba_theme', theme) } catch { /* ignore */ }
+  }, [theme])
   const lastSig = useRef('')
   const [flash, setFlash] = useState(false)
 
@@ -169,10 +176,14 @@ export default function App() {
       <div className="topbar">
         <div className="brandmark">G</div>
         <div>
-          <div className="brand-t">GBA <span className="div-dot">·</span> RESEARCH TELEMETRY</div>
+          <div className="brand-t" data-text="GBA · RESEARCH TELEMETRY">GBA <span className="div-dot">·</span> RESEARCH TELEMETRY</div>
           <div className="brand-s">CHA Global Business AI · Trust Survey &amp; Usage</div>
         </div>
         <span className="spacer" />
+        <div className="theme-sw" role="group" aria-label="Theme">
+          <button className={theme === 'royal' ? 'on' : ''} onClick={() => setTheme('royal')}>ROYAL</button>
+          <button className={theme === 'cyber' ? 'on' : ''} onClick={() => setTheme('cyber')}>CYBER</button>
+        </div>
         <span className={`live ${state === 'stale' ? 'stale' : ''}`}>
           <span className="dot" />
           {state === 'loading' ? 'CONNECTING' : state === 'error' ? 'OFFLINE' : state === 'stale' ? 'STALE' : 'LIVE'}
