@@ -17,11 +17,14 @@ const COMPONENT_LABELS = {
   q17_mode_switch: 'Mode switch',
   q18_consent_ui: 'Consent UI',
   q19_guest_browse: 'Guest browse',
-  q20_korean_ordinal: 'Visit ordinal',
+  q20_natural_greeting: 'Natural greeting',
   q21_visit_tracking: 'Visit tracking',
   q22_tts_normalize: 'TTS normalize',
-  q23_kakao_redirect: 'Kakao redirect',
   q24_overall_trust: 'Overall trust',
+  // Layer 5 — Background Recognition (the study's new construct)
+  q25_bg_aware: 'Background aware',
+  q26_bg_tailored: 'Tailored to me',
+  q27_bg_returning: 'Recognized returning',
 }
 
 const HOURS = Array.from({ length: 24 }, (_, h) => h)
@@ -207,18 +210,16 @@ export default function App() {
             <div className="col-5">
               <div className="stack">
                 <Panel idx="1.1" title="Trust layers" sub="avg / max">
-                  {['L1', 'L2', 'L3', 'L4'].map(L => {
+                  {[['L1', 'Identity'], ['L2', 'Quality'], ['L3', 'Naturalness'], ['L4', 'Policy'], ['L5', 'Background']].map(([L, name]) => {
                     const o = layers[L]
                     const p = o && o.avg != null ? (o.avg / o.max) * 100 : 0
-                    return <BarRow key={L} k={L} pct={p}
+                    return <BarRow key={L} k={`${L} ${name}`} pct={p}
                       value={o && o.avg != null ? `${o.avg}/${o.max}` : '—'} color="cyan" />
                   })}
                   {(() => {
-                    // TOTAL = sum of the four layer scores (consistent, ≤18).
-                    // (The API's total uses total_yes_count across all questions,
-                    // which isn't bounded by 18 — that produced "19/18".)
-                    const keys = ['L1', 'L2', 'L3', 'L4']
-                    const max = keys.reduce((s, k) => s + ((layers[k] && layers[k].max) || 0), 0) || 18
+                    // TOTAL = sum of the five trust-layer scores (max 20).
+                    const keys = ['L1', 'L2', 'L3', 'L4', 'L5']
+                    const max = keys.reduce((s, k) => s + ((layers[k] && layers[k].max) || 0), 0) || 20
                     const have = keys.every(k => layers[k] && layers[k].avg != null)
                     const avg = have ? keys.reduce((s, k) => s + layers[k].avg, 0) : null
                     const p = avg != null ? (avg / max) * 100 : 0
@@ -344,7 +345,7 @@ const MOCK = {
       const yes_pct = [96, 91, 88, 84, 80, 78, 75, 72, 68, 64, 61, 58, 55, 52, 48, 44, 40, 36, 92][i] ?? 50
       return [k, { n: 22, yes: Math.round(22 * yes_pct / 100), no: 22 - Math.round(22 * yes_pct / 100), yes_pct }]
     })),
-    layers: { L1: { avg: 2.5, max: 3 }, L2: { avg: 3.1, max: 4 }, L3: { avg: 3.8, max: 5 }, L4: { avg: 4.2, max: 6 }, total: { avg: 13.6, max: 18 } },
+    layers: { L1: { avg: 2.5, max: 3 }, L2: { avg: 3.1, max: 4 }, L3: { avg: 3.8, max: 5 }, L4: { avg: 4.2, max: 5 }, L5: { avg: 2.3, max: 3 }, total: { avg: 15.9, max: 20 } },
     demographics: {
       gender: [{ k: 'female', n: 13 }, { k: 'male', n: 9 }],
       grade: [{ k: '1', n: 10 }, { k: '2', n: 8 }, { k: '3', n: 4 }],
