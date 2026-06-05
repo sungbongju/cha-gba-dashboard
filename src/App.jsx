@@ -78,6 +78,33 @@ function Hist({ items, color = 'cyan', showCnt = true }) {
   )
 }
 
+function Ticker({ survey, t, layers }) {
+  const items = [
+    ['◉ LIVE FEED', '', 'acid'],
+    ['SURVEYS', fmt(survey.total), 'cyan'],
+    ['VALID', fmt(survey.valid), ''],
+    ['AVG TRUST', layers.total?.avg != null ? `${layers.total.avg}/18` : '—', 'magenta'],
+    ['SESSIONS', fmt(t.sessions_total), 'cyan'],
+    ['MESSAGES', fmt(t.messages_total), 'amber'],
+    ['USERS', fmt(t.users_total), 'acid'],
+    ['ANON SESS', fmt(t.anon_sessions), ''],
+    ['◆', '', 'magenta'],
+  ]
+  const doubled = [...items, ...items]
+  return (
+    <div className="ticker" aria-hidden="true">
+      <div className="ticker-track">
+        {doubled.map(([l, v, tone], i) => (
+          <span className="tick" key={i}>
+            <span className={`tl ${tone}`}>{l}</span>
+            {v && <span className="tv">{v}</span>}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [data, setData] = useState(null)
   const [state, setState] = useState('loading') // loading | live | stale | error
@@ -142,7 +169,7 @@ export default function App() {
       <div className="topbar">
         <div className="brandmark">■</div>
         <div>
-          <div className="brand-t">GBA // RESEARCH TELEMETRY</div>
+          <div className="brand-t glitch" data-text="GBA // RESEARCH TELEMETRY">GBA // RESEARCH TELEMETRY</div>
           <div className="brand-s">CHA Global Business AI · Trust Survey + Usage</div>
         </div>
         <span className="spacer" />
@@ -152,6 +179,8 @@ export default function App() {
         </span>
         <span className="asof">{asOf ? `AS OF ${asOf.toLocaleString('en-GB', { hour12: false })}` : '—'} · ↻ 10s</span>
       </div>
+
+      {data && <Ticker survey={survey} t={t} layers={layers} />}
 
       {state === 'error' && (
         <div className="err">DATA LINK DOWN — {err || 'unable to reach /api/stats'}. Check DASHBOARD_TOKEN env on the deployment.</div>
