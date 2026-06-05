@@ -206,12 +206,24 @@ export default function App() {
             <div className="col-5">
               <div className="stack">
                 <Panel idx="1.1" title="Trust layers" sub="avg / max">
-                  {['L1', 'L2', 'L3', 'L4', 'total'].map(L => {
+                  {['L1', 'L2', 'L3', 'L4'].map(L => {
                     const o = layers[L]
                     const p = o && o.avg != null ? (o.avg / o.max) * 100 : 0
-                    return <BarRow key={L} k={L === 'total' ? 'TOTAL' : L} pct={p}
-                      value={o && o.avg != null ? `${o.avg}/${o.max}` : '—'} color={L === 'total' ? 'acid' : 'cyan'} />
+                    return <BarRow key={L} k={L} pct={p}
+                      value={o && o.avg != null ? `${o.avg}/${o.max}` : '—'} color="cyan" />
                   })}
+                  {(() => {
+                    // TOTAL = sum of the four layer scores (consistent, ≤18).
+                    // (The API's total uses total_yes_count across all questions,
+                    // which isn't bounded by 18 — that produced "19/18".)
+                    const keys = ['L1', 'L2', 'L3', 'L4']
+                    const max = keys.reduce((s, k) => s + ((layers[k] && layers[k].max) || 0), 0) || 18
+                    const have = keys.every(k => layers[k] && layers[k].avg != null)
+                    const avg = have ? keys.reduce((s, k) => s + layers[k].avg, 0) : null
+                    const p = avg != null ? (avg / max) * 100 : 0
+                    return <BarRow key="total" k="TOTAL" pct={p}
+                      value={avg != null ? `${Math.round(avg * 100) / 100}/${max}` : '—'} color="acid" />
+                  })()}
                   <div className="empty">Higher = stronger perceived trust signal.</div>
                 </Panel>
 
